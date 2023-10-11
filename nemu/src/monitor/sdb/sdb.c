@@ -47,6 +47,11 @@ static int cmd_c(char *args) {
   return 0;
 }
 
+static int cmd_q(char *args) {
+  cpu_exec(0);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -56,7 +61,7 @@ static struct {
 } cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
-  { "q", "Exit NEMU", cmd_c},
+  { "q", "Exit NEMU", cmd_q},
 
   /* TODO: Add more commands */
 
