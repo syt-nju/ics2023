@@ -48,8 +48,7 @@ static int cmd_c(char *args) {
 }
 
 static int cmd_q(char *args) {
-  cpu_exec(0);
-  return 0;
+  return -1;
 }
 
 static int cmd_help(char *args);
@@ -124,7 +123,7 @@ void sdb_mainloop() {
 
     int i;
     for (i = 0; i < NR_CMD; i ++) {
-      if (strcmp(cmd, cmd_table[i].name) == 0) {
+      if (strcmp(cmd, cmd_table[i].name) == 0) {  
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
