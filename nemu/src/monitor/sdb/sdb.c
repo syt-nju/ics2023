@@ -56,7 +56,7 @@ static int cmd_q(char *args) {
   return -1;
 }
 
-int cmd_info(char *args)
+static int cmd_info(char *args)
 {
    /* extract the first argument */
   char *arg = strtok(NULL, " ");
