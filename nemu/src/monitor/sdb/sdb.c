@@ -18,6 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static int is_batch_mode = false;
 
@@ -47,21 +49,25 @@ static int cmd_c(char *args) {
   return 0;
 }
 
+
 static int cmd_q(char *args) {
   nemu_state.state=NEMU_QUIT;
   return -1;
 }
 
 static int cmd_help(char *args);
-
+static int cmd_si(char *args);
 static struct {
   const char *name;
   const char *description;
   int (*handler) (char *);
-} cmd_table [] = {
+} 
+cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
-  { "q", "Exit NEMU", cmd_q},
+  { "q", "Exit NEMU", cmd_q },
+  {"si","Execute the next few instruction",cmd_si}
+  
 
   /* TODO: Add more commands */
 
@@ -69,6 +75,13 @@ static struct {
 
 #define NR_CMD ARRLEN(cmd_table)
 
+static int cmd_si(char *args) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  int result=atoi(arg);
+  cpu_exec(result);
+  return 0;
+}
 static int cmd_help(char *args) {
   /* extract the first argument */
   char *arg = strtok(NULL, " ");
@@ -124,7 +137,7 @@ void sdb_mainloop() {
 
     int i;
     for (i = 0; i < NR_CMD; i ++) {
-      if (strcmp(cmd, cmd_table[i].name) == 0) {  
+      if (strcmp(cmd, cmd_table[i].name) == 0) {
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
