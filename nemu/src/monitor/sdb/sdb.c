@@ -55,6 +55,24 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_info(char *args)
+{
+   /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  if (*arg=='r')
+  {
+    isa_reg_display();
+    return 0;
+  } 
+  else if (*arg=='w')
+  {
+
+    return 0;
+  }
+  else return -1;
+  
+}
+
 static int cmd_help(char *args);
 static int cmd_si(char *args);
 static struct {
@@ -66,7 +84,8 @@ cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  {"si","Execute the next few instruction",cmd_si}
+  {"si","Execute the next few instruction",cmd_si},
+  {"info","Display information about the current state of the program",cmd_info},
   
 
   /* TODO: Add more commands */
