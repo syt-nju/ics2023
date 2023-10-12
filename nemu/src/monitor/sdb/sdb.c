@@ -19,7 +19,6 @@
 #include <readline/history.h>
 #include "sdb.h"
 
-#include  "regex.h"
 #include <stdio.h>
 #include <stdlib.h>
 
