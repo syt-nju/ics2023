@@ -61,6 +61,7 @@ static int cmd_info(char *args)
   char *arg = strtok(NULL, " ");
   if (*arg=='r')
   {
+    printf("shit\n");
     isa_reg_display();
     return 0;
   } 
