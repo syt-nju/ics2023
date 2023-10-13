@@ -177,7 +177,6 @@ int get_op(int p,int q)
     /*排除括号*/
     if (tokens[i].type=='(')
     {
-      printf("shit \n");
       parenthesis_count++;continue;}
     if (tokens[i].type==')')
     {parenthesis_count--;continue;}
