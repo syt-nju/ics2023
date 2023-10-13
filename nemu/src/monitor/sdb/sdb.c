@@ -53,7 +53,7 @@ static int cmd_c(char *args) {
 
 static int cmd_q(char *args) {
   nemu_state.state=NEMU_QUIT;
-  return -1;
+  return 0;
 }
 
 static int cmd_info(char *args)
@@ -67,7 +67,7 @@ static int cmd_info(char *args)
   } 
   else if (*arg=='w')
   {
-
+    
     return 0;
   }
   else return -1;
@@ -76,17 +76,28 @@ static int cmd_info(char *args)
 
 static int cmd_help(char *args);
 static int cmd_si(char *args);
+static int cmd_p(char *args)
+{
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  bool temp=true;
+  bool* success=&temp;
+  expr(arg,success);
+  return temp;
+  }
 static struct {
   const char *name;
   const char *description;
   int (*handler) (char *);
 } 
+
 cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   {"si","Execute the next few instruction",cmd_si},
   {"info","Display information about the current state of the program",cmd_info},
+  {"p","Print the value of specified expression",cmd_p},
   
 
   /* TODO: Add more commands */

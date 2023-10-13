@@ -21,9 +21,10 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+    TK_NOTYPE = 256, TK_EQ,  TK_PLUS='+',
 
   /* TODO: Add more token types */
+  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',
 
 };
 
@@ -37,8 +38,15 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {"\\+", TK_PLUS},         // plus
   {"==", TK_EQ},        // equal
+  {"\\-", TK_MINUS},         // minus
+  {"\\*", TK_MUL},         //multiply
+  {"\\/", TK_DIV}, 
+  {"(",TK_LPAREN},
+  {")",TK_RPAREN},
+  {"\\d+",TK_NUM}          //'n' stands for number
+
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -94,7 +102,29 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
+        /*{" +", TK_NOTYPE},    // spaces
+  {"\\+", '+'},         // plus
+  {"==", TK_EQ},        // equal
+  {"\\-", '-'},         // minus
+  {"\\*", '*'},         //multiply
+  {"\\/", '/'}, 
+  {"(",'('},
+  {")",')'},
+  {"\\d+",'n'}          //'n' stands for number*/
+
         switch (rules[i].token_type) {
+          case TK_NOTYPE:break;
+          case '+': 
+          case '-':
+          case '*':
+          case '/':
+          case '(':
+          case ')':
+          case 'n':
+          strncpy(tokens[nr_token].str, substr_start, substr_len);
+          tokens[nr_token].type = rules[i].token_type;
+          nr_token++;
+          break;
           default: TODO();
         }
 
@@ -111,6 +141,102 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(int p,int q)
+{ if (tokens[p].type != '(' || tokens[q].type != ')')
+    return false;
+  int count=0;
+  for (int i = p; i <= q; i++)
+  {
+    if (tokens[i].type == '(')
+    {count++;}
+    if (tokens[i].type == ')')
+    {count--;}
+    if (count == 0)
+    {
+      return false;
+    }
+    if (count < 0)
+    {printf("parentheses dismatch");
+    assert(0);
+      return false;}
+  }
+  return true;
+}
+/*function to check if the token is operand or operator*/
+bool is_operand(Token token)
+{
+  if (token.type == 'n')
+    return true;
+  else return false;
+}
+/*function to get the 主运算符 of given cut of expression*/
+int get_op(int p,int q)
+{
+  int result=-1;
+  int operators_inorder[NR_REGEX] ={'+','-','*','/'};
+  int parenthesis_count=0;//用来确定括号作用域
+  for (int i = p; i <= q; i++)
+  {/*先排除操作数*/
+    if (is_operand(tokens[i]))
+    {continue;}
+    /*丑陋的放置初始化问题的答辩*/
+    if (result==-1){result=i;continue;}
+    /*排除括号*/
+    if (tokens[i].type=='(')
+    {parenthesis_count++;continue;}
+    if (tokens[i].type==')')
+    {parenthesis_count--;continue;}
+    if (parenthesis_count>0)
+    {continue;}
+    /*比较优先级*/
+    for(int j=0;j<NR_REGEX;j++)
+    {
+      if(tokens[result].type==operators_inorder[j])
+        {break;}
+      if(tokens[i].type==operators_inorder[j])
+        {result=j;break;}
+    }
+  }
+  return result;
+}
+/*function to get evaluation result*/
+word_t eval(int p,int q)
+{
+  
+  if (p > q) {
+    /* Bad expression */
+    printf("Bad expression\n");
+    assert(0);
+  }
+  else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+    return atoi(tokens[p].str);
+  }
+  else if (check_parentheses(p, q) ) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1);
+  }
+  else {
+    int op = get_op(p,q);
+    int op_type=tokens[op].type;
+    int val1 = eval(p, op - 1);
+    int val2 = eval(op + 1, q);
+
+    switch (op_type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
+}
+
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -119,7 +245,8 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  printf("%d",eval(0,nr_token-1));
 
   return 0;
 }
+
