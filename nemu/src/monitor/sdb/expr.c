@@ -166,6 +166,10 @@ int get_op(int p,int q)
   int result=-1;
   int operators_inorder[NR_REGEX] ={'+','-','*','/'};
   int parenthesis_count=0;//用来确定括号作用域
+  for(int i =0;i<nr_token;i++)
+  {
+    printf("itype %d %d",i,tokens[i].type);
+  }
   for (int i = p; i <= q; i++)
   {/*先排除操作数*/
     printf("kuohao %d \n",parenthesis_count );
@@ -175,7 +179,7 @@ int get_op(int p,int q)
     if (result==-1){result=i;continue;}
     /*排除括号*/
     if (tokens[i].type=='(')
-    {printf("shir \n");
+    {
       parenthesis_count++;continue;}
     if (tokens[i].type==')')
     {parenthesis_count--;continue;}
