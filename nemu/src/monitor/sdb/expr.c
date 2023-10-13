@@ -169,8 +169,8 @@ int get_op(int p,int q)
   for (int i = p; i <= q; i++)
   {/*先排除操作数*/
     if (is_operand(tokens[i]))
-    {continue;}
-    /*丑陋的放置初始化问题的答辩*/
+    {printf("shit \n");continue;}
+    /*丑陋的初始化问题的答辩*/
     if (result==-1){result=i;continue;}
     /*排除括号*/
     if (tokens[i].type=='(')
