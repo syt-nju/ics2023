@@ -193,7 +193,7 @@ int get_op(int p,int q)
 /*function to get evaluation result*/
 word_t eval(int p,int q)
 {
-  
+  printf("%d %d \n",p,q);
   if (p > q) {
     /* Bad expression */
     printf("Bad expression\n");
