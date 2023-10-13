@@ -168,8 +168,9 @@ int get_op(int p,int q)
   int parenthesis_count=0;//用来确定括号作用域
   for (int i = p; i <= q; i++)
   {/*先排除操作数*/
+    printf("kuohao %d",parenthesis_count);
     if (is_operand(tokens[i]))
-    {printf("shit \n");continue;}
+    {continue;}
     /*丑陋的初始化问题的答辩*/
     if (result==-1){result=i;continue;}
     /*排除括号*/
