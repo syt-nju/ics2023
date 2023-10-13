@@ -45,7 +45,7 @@ static struct rule {
   {"\\/", TK_DIV}, 
   {"\\(",TK_LPAREN},
   {"\\)",TK_RPAREN},
-  {"\\d+",TK_NUM}          //'n' stands for number
+  {"[0-9]+",TK_NUM}          //'n' stands for number
 
 };
 
@@ -102,15 +102,6 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        /*{" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
-  {"\\-", '-'},         // minus
-  {"\\*", '*'},         //multiply
-  {"\\/", '/'}, 
-  {"(",'('},
-  {")",')'},
-  {"\\d+",'n'}          //'n' stands for number*/
 
         switch (rules[i].token_type) {
           case TK_NOTYPE:break;
