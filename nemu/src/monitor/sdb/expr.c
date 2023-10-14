@@ -172,8 +172,7 @@ int get_op(int p,int q)
     printf("kuohao %d \n",parenthesis_count );
     if (is_operand(tokens[i]))
     {continue;}
-    /*丑陋的初始化问题的答辩*/
-    if (result==-1){result=i;continue;}
+    
     /*排除括号*/
     if (tokens[i].type=='(')
     {
@@ -182,6 +181,9 @@ int get_op(int p,int q)
     {parenthesis_count--;continue;}
     if (parenthesis_count>0)
     {continue;}
+    /*丑陋的初始化问题的答辩*/
+    if (result==-1){result=i;continue;}
+
     /*比较优先级*/
     for(int j=0;j<NR_REGEX;j++)
     {
@@ -240,7 +242,6 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  printf("zuizuo %d \n",tokens[0].type);
   printf("%d \n",eval(0,nr_token-1));
 
   return 0;
