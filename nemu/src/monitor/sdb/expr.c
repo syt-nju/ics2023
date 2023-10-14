@@ -43,8 +43,8 @@ static struct rule {
   {"\\-", TK_MINUS},         // minus
   {"\\*", TK_MUL},         //multiply
   {"\\/", TK_DIV}, 
-  {"(",TK_LPAREN},
-  {")",TK_RPAREN},
+  {"\\(",TK_LPAREN},
+  {"\\)",TK_RPAREN},
   {"[0-9]+",TK_NUM}          //'n' stands for number
 
 };
@@ -240,6 +240,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
+  printf("zuizuo %d \n",tokens[0].type);
   printf("%d \n",eval(0,nr_token-1));
 
   return 0;
