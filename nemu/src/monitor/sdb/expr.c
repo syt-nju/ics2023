@@ -43,8 +43,8 @@ static struct rule {
   {"\\-", TK_MINUS},         // minus
   {"\\*", TK_MUL},         //multiply
   {"\\/", TK_DIV}, 
-  {"\\(",TK_LPAREN},
-  {"\\)",TK_RPAREN},
+  {"(",TK_LPAREN},
+  {")",TK_RPAREN},
   {"[0-9]+",TK_NUM}          //'n' stands for number
 
 };
