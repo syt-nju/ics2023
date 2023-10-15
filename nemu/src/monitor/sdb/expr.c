@@ -43,7 +43,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
   {"\\-", TK_MINUS},         // minus
   {"\\*", TK_MUL},         //multiply
-  {"\\/", TK_DIV}, 
+  {"\\/", TK_DIV},    
   {"\\(",TK_LPAREN},
   {"\\)",TK_RPAREN},
   {"0[xX][0-9a-fA-F]+",TK_HEX},
@@ -114,6 +114,8 @@ static bool make_token(char *e) {
           case ')':
           case 'n':
           case 'h':
+          case  '$':
+          case TK_REGARG:
           strncpy(tokens[nr_token].str, substr_start, substr_len);
           tokens[nr_token].str[substr_len]='\0';
           tokens[nr_token].type = rules[i].token_type;
