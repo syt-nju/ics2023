@@ -169,7 +169,6 @@ int get_op(int p,int q)
 
   for (int i = p; i <= q; i++)
   {/*先排除操作数*/
-    printf("kuohao %d \n",parenthesis_count );
     if (is_operand(tokens[i]))
     {continue;}
     
@@ -198,7 +197,6 @@ int get_op(int p,int q)
 /*function to get evaluation result*/
 word_t eval(int p,int q)
 {
-  printf("%d %d \n",p,q);
   if (p > q) {
     /* Bad expression */
     printf("Bad expression\n");
@@ -219,7 +217,6 @@ word_t eval(int p,int q)
   }
   else {
     int op = get_op(p,q);
-    printf("op %d \n",op);
     int op_type=tokens[op].type;
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
