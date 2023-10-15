@@ -85,7 +85,9 @@ static int cmd_p(char *args)
   bool* success=&temp;
   expr(args,success);
   return temp;
-  }
+  }                              //6 + (3 * 4 - 8) / 2
+
+
 static struct {
   const char *name;
   const char *description;
@@ -108,9 +110,9 @@ cmd_table [] = {
 #define NR_CMD ARRLEN(cmd_table)
 
 static int cmd_si(char *args) {
-  /* extract the first argument */
-  char *arg = strtok(NULL, " ");
-  int result=atoi(arg);
+
+  if (args==NULL){cpu_exec(1);}
+  int result=atoi(args);
   cpu_exec(result);
   return 0;
 }
