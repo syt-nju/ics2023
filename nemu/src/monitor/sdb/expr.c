@@ -85,7 +85,6 @@ static bool make_token(char *e) {
   regmatch_t pmatch;
 
   nr_token = 0;
-  printf("e %s\n",e);
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
@@ -97,7 +96,6 @@ static bool make_token(char *e) {
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
-        printf("position %d \n",position);
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
@@ -168,7 +166,6 @@ int get_op(int p,int q)
 {
   int result=-1;
   int parenthesis_count=0;//用来确定括号作用域
-  printf("kuohao:%d \n",parenthesis_count);
   for (int i = p; i <= q; i++)
   {/*先排除操作数*/
     if (is_operand(tokens[i]))
@@ -204,7 +201,6 @@ int get_op(int p,int q)
 /*function to get evaluation result*/
 word_t eval(int p,int q)
 {
-  printf("p: %d q:%d \n",p,q);
   if (p > q) {
     /* Bad expression */
     printf("Bad expression\n");
@@ -232,7 +228,6 @@ word_t eval(int p,int q)
   }
   else {
     int op = get_op(p,q);
-    printf("op:%d \n",op );
     int op_type=tokens[op].type;
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
@@ -255,7 +250,6 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  printf("nr_token %d \n",nr_token);
   printf("%d \n",eval(0,nr_token-1));
 
   return 0;
