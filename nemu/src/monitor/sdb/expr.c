@@ -49,7 +49,7 @@ static struct rule {
   {"0[xX][0-9a-fA-F]+",TK_HEX},
   {"[0-9]+",TK_NUM},          //'n' stands for number
   {"\\$",TK_REG},
-  {"\\$0|ra|sp|gp|tp|t[0-6]|s[0-9]|s1[0-1]",TK_REGARG}
+  {"\\0|ra|sp|gp|tp|t[0-6]|s[0-9]|s1[0-1]",TK_REGARG}
 };
 
 #define NR_REGEX ARRLEN(rules)
