@@ -229,11 +229,12 @@ word_t eval(int p,int q)
   }
   else {
     int op = get_op(p,q);
+    printf("op %d  \n",op);
     if(op==-1)
     {
       
        unsigned int a=vaddr_read(eval(p+1,q),4);
-       printf("%d",a);
+       printf("%d \n",a);
        return a;
     }
     int op_type=tokens[op].type;
