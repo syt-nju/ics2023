@@ -168,7 +168,7 @@ int get_op(int p,int q)
   int result=-1;
   int operators_inorder[NR_REGEX] ={'+','-','*','/'};
   int parenthesis_count=0;//用来确定括号作用域
-
+  printf("kuohao:%d \n",parenthesis_count);
   for (int i = p; i <= q; i++)
   {/*先排除操作数*/
     if (is_operand(tokens[i]))
@@ -227,7 +227,7 @@ word_t eval(int p,int q)
   }
   else {
     int op = get_op(p,q);
-    printf("op:%d",op);
+    printf("op:%d \n",op );
     int op_type=tokens[op].type;
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
