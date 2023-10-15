@@ -80,10 +80,10 @@ static int cmd_si(char *args);
 static int cmd_p(char *args)
 {
   /* extract the first argument */
-  char *arg = strtok(NULL, " ");
+  //char *arg = strtok(NULL, " ");
   bool temp=true;
   bool* success=&temp;
-  expr(arg,success);
+  expr(args,success);
   return temp;
   }
 static struct {
