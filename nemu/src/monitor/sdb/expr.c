@@ -231,6 +231,7 @@ word_t eval(int p,int q)
     int op = get_op(p,q);
     if(op==-1)
     {
+      Log("1");
       return vaddr_read(eval(p+1,q),4);
     }
     int op_type=tokens[op].type;
@@ -242,7 +243,6 @@ word_t eval(int p,int q)
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
-      // return vaddr_read(atoi(tokens[]), int len) 
       default: assert(0);
     }
   }
