@@ -217,7 +217,8 @@ word_t eval(int p,int q)
     {return (unsigned int)atoi(tokens[p].str);}
     else if (tokens[p].type == 'h')
     {
-      int temp=strtoul(tokens[p].str, NULL, 16);  //20 * (21 - *(0x80000010 + 20))
+      int temp=strtoul(tokens[p].str, NULL, 16);  //0x80000004 + *(0x80000008 - 4) * 2
+
       return (unsigned int)temp;
     }
     else assert(0);
@@ -266,7 +267,6 @@ word_t expr(char *e, bool *success) {
   }
   
 }
-printf("tokens[18] %d \n",tokens[18].type);
   printf("%u \n",eval(0,nr_token-1));
 
   return 0;
