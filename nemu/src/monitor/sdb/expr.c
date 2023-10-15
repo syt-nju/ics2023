@@ -217,8 +217,7 @@ word_t eval(int p,int q)
     else if (tokens[p].type == 'h')
     {
       int temp=strtoul(tokens[p].str, NULL, 16);
-      unsigned int b=(unsigned int)temp;
-      return b;
+      return (unsigned int)temp;
     }
     else assert(0);
   }
@@ -261,7 +260,7 @@ word_t expr(char *e, bool *success) {
     tokens[i].type = TK_pointer;
   }
 }
-  printf("%d \n",eval(0,nr_token-1));
+  printf("%u \n",eval(0,nr_token-1));
 
   return 0;
 }
