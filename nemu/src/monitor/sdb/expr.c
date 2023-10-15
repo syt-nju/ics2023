@@ -185,7 +185,8 @@ int get_op(int p,int q)
 
     /*比较优先级*/
     switch(tokens[i].type)
-    {
+    {                 //p 0x80000004 + *(0x80000008 - 4) * 2
+
       case '+':
       case '-':
       if (tokens[result].type=='*'||tokens[result].type=='/')
@@ -263,6 +264,7 @@ word_t expr(char *e, bool *success) {
   if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '('||!is_operand(tokens[i-1])) ) {
     tokens[i].type = TK_pointer;
   }
+  printf("tokens[18] %d",tokens[18].type);
 }
   printf("%u \n",eval(0,nr_token-1));
 
