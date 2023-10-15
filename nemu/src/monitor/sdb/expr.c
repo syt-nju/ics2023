@@ -45,8 +45,9 @@ static struct rule {
   {"\\/", TK_DIV}, 
   {"\\(",TK_LPAREN},
   {"\\)",TK_RPAREN},
+  {"0[xX][0-9a-fA-F]+",TK_HEX},
   {"[0-9]+",TK_NUM},          //'n' stands for number
-  {"0[xX][0-9a-fA-F]+",TK_HEX}
+  
 };
 
 #define NR_REGEX ARRLEN(rules)
