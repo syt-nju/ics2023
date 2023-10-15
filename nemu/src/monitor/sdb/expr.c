@@ -216,7 +216,7 @@ word_t eval(int p,int q)
     {return (unsigned int)atoi(tokens[p].str);}
     else if (tokens[p].type == 'h')
     {
-      int temp=strtoul(tokens[p].str, NULL, 16);
+      int temp=strtoul(tokens[p].str, NULL, 16);  //20 * (21 - *(0x80000010 + 20))
       return (unsigned int)temp;
     }
     else assert(0);
@@ -231,7 +231,10 @@ word_t eval(int p,int q)
     int op = get_op(p,q);
     if(op==-1)
     {
-      return vaddr_read(eval(p+1,q),4);
+      
+       unsigned int a=vaddr_read(eval(p+1,q),4);
+       printf("%d",a);
+       return a;
     }
     int op_type=tokens[op].type;
     int val1 = eval(p, op - 1);
