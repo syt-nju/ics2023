@@ -194,7 +194,7 @@ int get_op(int p,int q)
       case '*':
       case '/':
       break;
-      default:return -1;//表示为指针
+      default:break;
     }
   }
   return result;
