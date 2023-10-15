@@ -25,7 +25,7 @@ enum {
     TK_NOTYPE = 256, TK_EQ,  TK_PLUS='+',
 
   /* TODO: Add more token types */
-  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',TK_HEX='h',TK_pointer='s',
+  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',TK_HEX='h',TK_pointer='s',TK_REG='$',TK_REGARG='A',
 
 };
 
@@ -48,7 +48,8 @@ static struct rule {
   {"\\)",TK_RPAREN},
   {"0[xX][0-9a-fA-F]+",TK_HEX},
   {"[0-9]+",TK_NUM},          //'n' stands for number
-  
+  {"\\$",TK_REG},
+  {"\\$0|ra|sp|gp|tp|t[0-6]|s[0-9]|s1[0-1]",TK_REGARG}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -181,7 +182,7 @@ int get_op(int p,int q)
     if (parenthesis_count>0)
     {continue;}
     /*丑陋的初始化问题的答辩*/
-    if (result==-1&&tokens[i].type!=TK_pointer){result=i;continue;}
+    if (result==-1&&tokens[i].type!=TK_pointer&&tokens[i].type!=TK_REG&&tokens[i].type!=TK_REGARG){result=i;continue;}
 
     /*比较优先级*/
     switch(tokens[i].type)
@@ -235,9 +236,15 @@ word_t eval(int p,int q)
     int op = get_op(p,q);
     if(op==-1)
     {
-      
-       unsigned int a=vaddr_read(eval(p+1,q),4);
-       return a;
+      if(tokens[p].type==TK_pointer)
+{       int a=vaddr_read(eval(p+1,q),4);
+       return a;}
+       else if (tokens[p].type==TK_REG)
+       {
+        bool temp=true;
+        bool *success=&temp;
+        return isa_reg_str2val(tokens[p+1].str, success);
+       }
     }
     int op_type=tokens[op].type;
     int val1 = eval(p, op - 1);
