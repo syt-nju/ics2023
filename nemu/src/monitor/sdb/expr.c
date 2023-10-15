@@ -217,7 +217,7 @@ word_t eval(int p,int q)
     else if (tokens[p].type == 'h')
     {
       long int temp=strtol(tokens[p].str, NULL, 16);
-      return (int)temp;
+      return (unsigned int)temp;
     }
     else assert(0);
   }
