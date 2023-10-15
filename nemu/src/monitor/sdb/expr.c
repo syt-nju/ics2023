@@ -267,7 +267,7 @@ word_t expr(char *e, bool *success) {
   }
   
 }
-printf("ttype %d \n",tokens[8].type);
+printf("ttype %d \n",tokens[6].type);
   printf("%u \n",eval(0,nr_token-1));
 
   return 0;
