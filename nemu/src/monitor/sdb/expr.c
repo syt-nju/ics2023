@@ -24,7 +24,7 @@ enum {
     TK_NOTYPE = 256, TK_EQ,  TK_PLUS='+',
 
   /* TODO: Add more token types */
-  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',
+  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',TK_HEX='h',
 
 };
 
@@ -45,8 +45,8 @@ static struct rule {
   {"\\/", TK_DIV}, 
   {"\\(",TK_LPAREN},
   {"\\)",TK_RPAREN},
-  {"[0-9]+",TK_NUM}          //'n' stands for number
-
+  {"[0-9]+",TK_NUM},          //'n' stands for number
+  {"0[xX][0-9a-fA-F]+",TK_HEX}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -112,6 +112,7 @@ static bool make_token(char *e) {
           case '(':
           case ')':
           case 'n':
+          case 'h':
           strncpy(tokens[nr_token].str, substr_start, substr_len);
           tokens[nr_token].type = rules[i].token_type;
           nr_token++;
@@ -156,7 +157,7 @@ bool check_parentheses(int p,int q)
 /*function to check if the token is operand or operator*/
 bool is_operand(Token token)
 {
-  if (token.type == 'n')
+  if (token.type == 'n'||token.type=='h')
     return true;
   else return false;
 }
@@ -207,7 +208,14 @@ word_t eval(int p,int q)
      * For now this token should be a number.
      * Return the value of the number.
      */
-    return atoi(tokens[p].str);
+    if (tokens[p].type == 'n')
+    {return atoi(tokens[p].str);}
+    else if (tokens[p].type == 'h')
+    {
+      long int temp=strtol(tokens[p].str, NULL, 16);
+      return (int)temp;
+    }
+    else assert(0);
   }
   else if (check_parentheses(p, q) ) {
     /* The expression is surrounded by a matched pair of parentheses.
