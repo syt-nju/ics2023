@@ -264,8 +264,9 @@ word_t expr(char *e, bool *success) {
   if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '('||!is_operand(tokens[i-1])) ) {
     tokens[i].type = TK_pointer;
   }
-  printf("tokens[18] %d \n",tokens[18].type);
+  
 }
+printf("tokens[18] %d \n",tokens[18].type);
   printf("%u \n",eval(0,nr_token-1));
 
   return 0;
