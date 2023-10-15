@@ -19,12 +19,13 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+extern word_t vaddr_read(vaddr_t addr, int len) ;
 
 enum {
     TK_NOTYPE = 256, TK_EQ,  TK_PLUS='+',
 
   /* TODO: Add more token types */
-  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',TK_HEX='h',
+  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',TK_HEX='h',TK_pointer='s',
 
 };
 
@@ -180,7 +181,7 @@ int get_op(int p,int q)
     if (parenthesis_count>0)
     {continue;}
     /*丑陋的初始化问题的答辩*/
-    if (result==-1){result=i;continue;}
+    if (result==-1&&tokens[i].type!=TK_pointer){result=i;continue;}
 
     /*比较优先级*/
     switch(tokens[i].type)
@@ -193,7 +194,7 @@ int get_op(int p,int q)
       case '*':
       case '/':
       break;
-      default:assert(0);
+      default:return -1;//表示为指针
     }
   }
   return result;
@@ -228,6 +229,10 @@ word_t eval(int p,int q)
   }
   else {
     int op = get_op(p,q);
+    if(op==-1)
+    {
+      return vaddr_read(eval(p+1,q),4);
+    }
     int op_type=tokens[op].type;
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
@@ -237,6 +242,7 @@ word_t eval(int p,int q)
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
+      // return vaddr_read(atoi(tokens[]), int len) 
       default: assert(0);
     }
   }
@@ -250,6 +256,11 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
+  for (int i = 0; i < nr_token; i ++) {
+  if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '('||!is_operand(tokens[i-1])) ) {
+    tokens[i].type = TK_pointer;
+  }
+}
   printf("%d \n",eval(0,nr_token-1));
 
   return 0;
