@@ -231,12 +231,10 @@ word_t eval(int p,int q)
   }
   else {
     int op = get_op(p,q);
-    printf("op %d  \n",op);
     if(op==-1)
     {
       
        unsigned int a=vaddr_read(eval(p+1,q),4);
-       printf("%d \n",a);
        return a;
     }
     int op_type=tokens[op].type;
@@ -267,7 +265,6 @@ word_t expr(char *e, bool *success) {
   }
   
 }
-printf("ttype %d \n",tokens[6].type);
   printf("%u \n",eval(0,nr_token-1));
 
   return 0;
