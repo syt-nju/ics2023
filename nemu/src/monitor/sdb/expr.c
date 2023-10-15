@@ -231,8 +231,6 @@ word_t eval(int p,int q)
     int op = get_op(p,q);
     if(op==-1)
     {
-      Log("1");
-      printf("shit");
       return vaddr_read(eval(p+1,q),4);
     }
     int op_type=tokens[op].type;
