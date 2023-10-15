@@ -27,13 +27,60 @@ static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
 "  unsigned result = %s; "
+"  if(result>=65535){reutrn 0;}"
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+// 随机生成数字
+int MAX_NUM=10000;
+void gen_num() {
+
+
+  
+  int num = rand() % MAX_NUM;
+  sprintf(buf + strlen(buf), "%d", num);
 }
+
+// 随机生成运算符
+void gen_rand_op() {
+  switch (rand() % 4) {
+    case 0: strcat(buf, "+"); break;
+    case 1: strcat(buf, "-"); break;
+    case 2: strcat(buf, "*"); break;
+    default: strcat(buf, "/"); break;
+  }
+}
+
+// 随机生成'('或者')'
+void gen(char ch) {
+  sprintf(buf + strlen(buf), "%c", ch);
+}
+
+// 随机选择[0, n)内的整数
+int choose(int n) {
+  return rand() % n;
+}
+#define MAX_DEPTH 10
+static void gen_rand_expr(int depth) {
+  if(depth>=MAX_DEPTH){gen_num();}
+  switch (choose(3)) {
+    case 0: 
+      gen_num();
+      break;
+    case 1:
+      gen('(');
+      gen_rand_expr(depth+1);
+      gen(')');
+      break;
+    default:
+      gen_rand_expr(depth+1);
+      gen_rand_op();
+      gen_rand_expr(depth+1);
+      break;
+  }
+}
+
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -44,7 +91,7 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
+    gen_rand_expr(0);
 
     sprintf(code_buf, code_format, buf);
 
