@@ -25,7 +25,7 @@ enum {
     TK_NOTYPE = 256, TK_EQ,  TK_PLUS='+',
 
   /* TODO: Add more token types */
-  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',TK_HEX='h',TK_pointer='s',TK_REG='$',TK_REGARG='A',
+  TK_MINUS='-',TK_MUL='*',TK_DIV='/',TK_LPAREN='(',TK_RPAREN=')', TK_NUM='n',TK_HEX='h',TK_pointer='s',TK_REG='$',TK_REGARG='A',TK_FU='F'
 
 };
 
@@ -184,7 +184,7 @@ int get_op(int p,int q)
     if (parenthesis_count>0)
     {continue;}
     /*丑陋的初始化问题的答辩*/
-    if (result==-1&&tokens[i].type!=TK_pointer&&tokens[i].type!=TK_REG&&tokens[i].type!=TK_REGARG){result=i;continue;}
+    if (result==-1&&tokens[i].type!=TK_pointer&&tokens[i].type!=TK_REG&&tokens[i].type!=TK_REGARG &&tokens[i].type!=TK_FU){result=i;continue;}
 
     /*比较优先级*/
     switch(tokens[i].type)
@@ -247,6 +247,10 @@ word_t eval(int p,int q)
         bool *success=&temp;
         return isa_reg_str2val(tokens[p+1].str, success);
        }
+       else if (tokens[p].type==TK_FU)
+       {
+        return -eval(p+1,q);
+       }
     }
     int op_type=tokens[op].type;
     int val1 = eval(p, op - 1);
@@ -273,6 +277,9 @@ word_t expr(char *e, bool *success) {
   for (int i = 0; i < nr_token; i ++) {
   if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '('||(!is_operand(tokens[i-1]) && tokens[i-1].type!=')')) ) {
     tokens[i].type = TK_pointer;
+  }
+  if (tokens[i].type == '-' && (i == 0 || tokens[i - 1].type == '('||(!is_operand(tokens[i-1]) && tokens[i-1].type!=')')) ) {
+    tokens[i].type = TK_FU;
   }
   
 }
