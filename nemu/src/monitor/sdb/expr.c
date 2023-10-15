@@ -213,7 +213,7 @@ word_t eval(int p,int q)
      * Return the value of the number.
      */
     if (tokens[p].type == 'n')
-    {return atoi(tokens[p].str);}
+    {return (unsigned int)atoi(tokens[p].str);}
     else if (tokens[p].type == 'h')
     {
       int temp=strtoul(tokens[p].str, NULL, 16);
