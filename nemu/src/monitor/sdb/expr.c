@@ -167,7 +167,6 @@ bool is_operand(Token token)
 int get_op(int p,int q)
 {
   int result=-1;
-  int operators_inorder[NR_REGEX] ={'+','-','*','/'};
   int parenthesis_count=0;//用来确定括号作用域
   printf("kuohao:%d \n",parenthesis_count);
   for (int i = p; i <= q; i++)
@@ -187,12 +186,17 @@ int get_op(int p,int q)
     if (result==-1){result=i;continue;}
 
     /*比较优先级*/
-    for(int j=0;j<NR_REGEX;j++)
+    switch(tokens[i].type)
     {
-      if(tokens[result].type==operators_inorder[j])
-        {break;}
-      if(tokens[i].type==operators_inorder[j])
-        {result=j;break;}
+      case '+':
+      case '-':
+      if (tokens[result].type=='*'||tokens[result].type=='/')
+      {result=i;}
+      break;
+      case '*':
+      case '/':
+      break;
+      default:assert(0);
     }
   }
   return result;
