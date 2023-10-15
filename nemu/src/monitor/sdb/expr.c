@@ -198,7 +198,7 @@ int get_op(int p,int q)
       {result=i;}
       break;
       default:break;
-    }
+    } 
   }
   return result;
 }
@@ -216,7 +216,7 @@ word_t eval(int p,int q)
      * Return the value of the number.
      */
     if (tokens[p].type == 'n')
-    {return (unsigned int)atoi(tokens[p].str);}
+    {return atoi(tokens[p].str);}
     else if (tokens[p].type == 'h')
     {
       int temp=strtoul(tokens[p].str, NULL, 16);  //0x80000004 + *(0x80000008 - 4) * 2
