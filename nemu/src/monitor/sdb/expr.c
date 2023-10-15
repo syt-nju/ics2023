@@ -189,11 +189,13 @@ int get_op(int p,int q)
 
       case '+':
       case '-':
-      if (tokens[result].type=='*'||tokens[result].type=='/')
+      if (tokens[result].type=='*'||tokens[result].type=='/'||tokens[result].type=='+'||tokens[result].type=='-')
       {result=i;}
       break;
       case '*':
       case '/':
+      if (tokens[result].type=='*'||tokens[result].type=='/')
+      {result=i;}
       break;
       default:break;
     }
