@@ -110,8 +110,8 @@ cmd_table [] = {
 #define NR_CMD ARRLEN(cmd_table)
 
 static int cmd_si(char *args) {
-
-  if (args==NULL){cpu_exec(1);}
+  
+  if (args==NULL){cpu_exec(1);return 0;}
   int result=atoi(args);
   cpu_exec(result);
   return 0;
