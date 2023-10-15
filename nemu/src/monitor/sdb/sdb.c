@@ -60,6 +60,7 @@ static int cmd_info(char *args)
 {
    /* extract the first argument */
   char *arg = strtok(NULL, " ");
+  
   if (*arg=='r')
   {
     isa_reg_display();
