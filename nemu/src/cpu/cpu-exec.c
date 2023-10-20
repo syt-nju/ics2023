@@ -17,13 +17,16 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
-
+#include "../monitor/sdb/sdb.h"
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+
+/*difftest 宏*/
+#define CONFIG_WATCHPOINT   {if(difftest_check()){nemu_state.state=NEMU_STOP;    }}
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -126,3 +129,6 @@ void cpu_exec(uint64_t n) {
     case NEMU_QUIT: statistic();
   }
 }
+
+
+

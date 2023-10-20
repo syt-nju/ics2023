@@ -15,9 +15,13 @@
 
 #ifndef __SDB_H__
 #define __SDB_H__
-
+#define NR_WP 32
 #include <common.h>
-
 word_t expr(char *e, bool *success);
-
+void info_WP();
+void  set_WP(char* expr);
+void del_WP(int NO);
+void print_WP(int NO );
+int difftest_check();
+uint32_t expr(char *e, bool *success);
 #endif

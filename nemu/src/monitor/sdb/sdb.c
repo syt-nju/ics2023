@@ -68,13 +68,22 @@ static int cmd_info(char *args)
   } 
   else if (*arg=='w')
   {
-    
+    info_WP();
     return 0;
   }
   else return -1;
   
 }
-
+static int cmd_w(char *args)
+{
+  set_WP(args);
+  return 0;
+}
+static int cmd_d(char *args)
+{
+  del_WP(atoi(args));
+  return 0;
+}
 static int cmd_help(char *args);
 static int cmd_si(char *args);
 static int cmd_p(char *args)
@@ -83,7 +92,7 @@ static int cmd_p(char *args)
   //char *arg = strtok(NULL, " ");
   bool temp=true;
   bool* success=&temp;
-  expr(args,success);
+  printf ("%u \n",expr(args,success));
   return temp;
   }                              //6 + (3 * 4 - 8) / 2
 
@@ -101,6 +110,8 @@ cmd_table [] = {
   {"si","Execute the next few instruction",cmd_si},
   {"info","Display information about the current state of the program",cmd_info},
   {"p","Print the value of specified expression",cmd_p},
+  {"w","set watchpoints",cmd_w},
+  {"d","delete watchpoints",cmd_d},
   
 
   /* TODO: Add more commands */

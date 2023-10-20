@@ -283,8 +283,7 @@ word_t expr(char *e, bool *success) {
   }
   
 }
-  printf("%u \n",eval(0,nr_token-1));
+  return (unsigned int)eval(0, nr_token - 1);
 
-  return 0;
 }
 
