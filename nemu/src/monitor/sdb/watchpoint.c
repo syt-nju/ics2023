@@ -71,12 +71,10 @@ void del_WP(int NO)
   WP* before =NULL;
   while(temp!=NULL)
   {
-    printf("1");
     if (temp->NO==NO)
     {
       before->next=temp->next;
       free_wp(temp);
-      printf("2");
     }
     before=temp;
     temp=temp->next;
