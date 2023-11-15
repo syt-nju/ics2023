@@ -83,7 +83,7 @@ void del_WP(int NO)
     before=temp;
     temp=temp->next;
   }
-  temp->next = NULL;
+  
   panic("Wrong NO! Watchpoint not found!");
 }
 /*打印指定监视点的表达式及结果*/
