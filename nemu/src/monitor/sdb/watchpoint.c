@@ -68,6 +68,7 @@ void  set_WP(char* Expr)
 void del_WP(int NO)
 { 
   WP* temp=head;
+  printf("%d",head->NO);
   WP* before =NULL;
   while(temp!=NULL)
   {
