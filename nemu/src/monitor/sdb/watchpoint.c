@@ -72,9 +72,13 @@ void del_WP(int NO)
   while(temp!=NULL)
   {
     if (temp->NO==NO)
-    {
-      before->next=temp->next;
-      free_wp(temp);
+    { 
+      if (before==NULL  )
+      {
+        head=temp->next;
+      }
+      else{before->next=temp->next;
+      free_wp(temp);}
     }
     before=temp;
     temp=temp->next;
