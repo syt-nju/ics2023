@@ -79,6 +79,7 @@ void del_WP(int NO)
       }
       else{before->next=temp->next;
       free_wp(temp);}
+      return ;
     }
     before=temp;
     temp=temp->next;
