@@ -30,7 +30,7 @@ typedef struct watchpoint {
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 /*return an node head with empty value and expr*/
-WP* new_wp() {
+void new_wp() {
   if (free_ == NULL) {
     panic("No free watchpoint!") ;
   }
@@ -39,7 +39,6 @@ WP* new_wp() {
   free_ = free_->next;
   wp->next = head;
   head=wp;
-  return wp;
 }
 
 void free_wp(WP *wp) {
@@ -60,10 +59,10 @@ void init_wp_pool() {
 /* TODO: Implement the functionality of watchpoint */
 void  set_WP(char* Expr) 
 {
-  WP* wp=new_wp();
-  wp->expr=Expr;
-  wp->value=expr(Expr,NULL);
-  printf("已设置节点 NO.%d 表达式%s 现值为 %u\n",wp->NO,wp->expr,wp->value);
+  new_wp();
+  head->expr=Expr;
+  head->value=expr(Expr,NULL);
+  printf("已设置节点 NO.%d 表达式%s 现值为 %u\n",head->NO,head->expr,head->value);
 
 }
 /*删除序号对应节点并且把其归还回free_*/
