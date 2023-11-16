@@ -38,7 +38,6 @@ void new_wp() {
   WP *wp = free_;
   free_ = free_->next;
   wp->next = head;
-  printf("shit:%s",head->expr);
   head=wp;
 }
 
