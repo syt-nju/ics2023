@@ -43,6 +43,9 @@ void new_wp() {
 
 void free_wp(WP *wp) {
   wp->next = free_;
+  /*释放malloc的空间*/
+  free(wp->expr);
+
   free_ = wp;
 }
 void init_wp_pool() {
@@ -60,7 +63,10 @@ void init_wp_pool() {
 void  set_WP(char* Expr) 
 {
   new_wp();
-  head->expr=Expr;
+  /*New_wp后head->next的值会神奇的变成刚输入的参数？？？？？难道我的expr指向的位置恰好存储输入的char* e？woc有道理*/
+  head->expr=malloc(strlen(Expr)+1);
+  strcpy(head->expr,Expr);
+  /*devidiing line */
   head->value=expr(Expr,NULL);
   printf("已设置节点 NO.%d 表达式%s 现值为 %u\n",head->NO,head->expr,head->value);
 
