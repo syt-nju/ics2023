@@ -111,6 +111,7 @@ void info_WP()
   }
   while(temp!=NULL)
   {
+    printf("%s",temp->expr);
     printf("NO.%d: %s value:%u\n",temp->NO,temp->expr,expr(temp->expr,NULL));
     temp=temp->next;
   }
