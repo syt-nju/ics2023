@@ -126,7 +126,16 @@ endmenu
 
 menu "Testing and Debugging"
 
+#dividing line written by Claude
 
+config WATCHPOINT 
+	bool "Enable watchpoint"
+	default n
+	help
+	  Enable watchpoint support in the kernel.
+
+
+#deviding line
 config TRACE
   bool "Enable tracer"
   default y
@@ -213,5 +222,12 @@ endchoice
 config RT_CHECK
   bool "Enable runtime checking"
   default y
+
+
+
+
+
+
+
 
 endmenu

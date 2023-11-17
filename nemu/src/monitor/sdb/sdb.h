@@ -24,4 +24,15 @@ void del_WP(int NO);
 void print_WP(int NO );
 int difftest_check();
 uint32_t expr(char *e, bool *success);
+//add myself without debug
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+
+  /* TODO: Add more members if necessary */
+  char* expr;
+  uint32_t value;
+} WP;
+extern WP *head;
+//
 #endif

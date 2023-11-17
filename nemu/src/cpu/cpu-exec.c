@@ -25,8 +25,7 @@
  */
 #define MAX_INST_TO_PRINT 10
 
-/*difftest 宏*/
-#define CONFIG_WATCHPOINT   {if(difftest_check()){nemu_state.state=NEMU_STOP;    }}
+
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -35,12 +34,38 @@ static bool g_print_step = false;
 
 void device_update();
 
+//add for the declare of head of watchpoint
+extern WP *head;
+//
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  //scan all watchpoints (debug)
+  #ifdef CONFIG_WATCHPOINT
+  if (head==NULL){return;}
+  else 
+  { bool res=true;
+    bool *success=&res;
+    WP* temp=head;
+    while(temp!=NULL)
+    {
+      if(expr(temp->expr,success)!=temp->value)
+      {
+        nemu_state.state = NEMU_STOP;
+        int a=expr(temp->expr,success);
+        printf("watchpoint %d: expr=%s  changed \nold value= %d \nnew value= %d",temp->NO,temp->expr,temp->value,a);
+        temp->value=a;
+        return;
+      }
+      temp=temp->next;
+    }
+    if(! *success)
+    {panic("expr error");}
+  }
+  #endif
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
