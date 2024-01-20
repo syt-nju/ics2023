@@ -23,7 +23,7 @@
 #define Mw vaddr_write
 
 enum {
-  TYPE_I, TYPE_U, TYPE_S,TYPE_J,TYPE_R,
+  TYPE_I, TYPE_U, TYPE_S,TYPE_J,TYPE_R,TYPE_B,
   TYPE_N, // none
 };
 
@@ -33,6 +33,8 @@ enum {
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 
+
+#define immB() do { *imm = SEXT(BITS(i, 31, 31), 1) << 11 | ((SEXT(BITS(i, 7, 7), 1) << 63) >> 63) << 10 | ((SEXT(BITS(i, 30, 25), 6) << 58) >> 58) << 4 | ((SEXT(BITS(i, 11, 8), 4) << 60) >> 60); *imm = *imm << 1; } while (0)
 #define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1) << 20) | BITS(i, 30, 21) << 1 | BITS(i, 20, 20) << 11 | BITS(i, 19, 12) << 12 ; } while(0)
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
@@ -45,6 +47,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
     case TYPE_J:                   immJ();break;
+    case TYPE_B: src1R(); src2R(); immB(); break;
   }
 }
 
@@ -72,6 +75,18 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 00000 11001 11", ret    , I, R(rd) = s -> pc + 4; s -> dnpc = (src1 + imm) & ~1); //ret指令即为 rd设为 x0（恒为0）的那个寄存器（不需要保存下一条指令的地址）的jalr
   INSTPAT("??????? ????? ????? 000 ????? 11001 11",jalr    , I,R(rd)=s->pc+4;s -> dnpc = (src1 + imm) & ~1);//riscV地址要求为偶数  "& ~1"    
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));//sw=store word
+//to solve add
+  INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, s -> dnpc += src1 == src2 ? imm - 4: 0;);
+  INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = Mr(src1 + imm, 4));
+  INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(rd) = src1 - src2);
+
+  INSTPAT("0000000 00001 ????? 011 ????? 00100 11", seqz  , I, R(rd) = (uint32_t)src1 < 1 ? 1: 0);//天才，实际上为sltui rd  rc1 1
+  INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(rd) = (uint32_t)src1 < (uint32_t)src2 ? 1: 0;);
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(rd) = (uint32_t)src1 < (uint32_t)imm ? 1: 0);
+  INSTPAT("??????? ????? ????? 010 ????? 00100 11", slti   , I, R(rd) = (int32_t)src1 < (int32_t)imm ? 1: 0);
+  INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(rd) = (int)src1 < (int)src2 ? 1: 0);
+
+  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, s -> dnpc += src1 != src2 ? imm - 4: 0;);
 
 //end modification by syt
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
