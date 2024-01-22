@@ -4,6 +4,8 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+
+//测试不充分 debug
 size_t strlen(const char *s) {
   
    if (s == NULL) {
